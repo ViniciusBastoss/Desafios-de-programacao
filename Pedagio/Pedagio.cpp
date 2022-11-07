@@ -16,20 +16,29 @@ struct carro{
 void printList(list<carro> lista){
     list<carro>::iterator it;
     for(it = lista.begin();it != lista.end(); it++){
-        cout <<"Placa:"<< it->placa << endl;
-        cout <<"horario:"<< it->horario << endl;
-        cout <<"status:"<< it->status << endl;
-        cout << "Km:"<< it->km << endl;
+        cout <<"  Placa:"<< it->placa;
+        cout <<"  horario:"<< it->horario;
+        cout <<"  status:"<< it->status;
+        cout << "  Km:"<< it->km << endl;
     }
 }
 
-bool compara(const carro a,const carro b){
-    carro carro1 = a;
-    carro carro2 = b;
-    if(carro1.km > carro2.km)
-       return 1;
+//criterio de comparação para a ordenaçao
+bool compara(const carro carro1,const carro carro2){
+    int result;
+    result = strcmp(carro1.placa,carro2.placa);
+    if(result > 0)
+       return 0;
+    else
+      if(result < 0)
+        return 1;
+    result = strcmp(carro1.horario,carro2.horario);
+    if(result > 0)
+       return 0;
+    else
+      if(result < 0)
+        return 1;
     return 0;
-
 }
 
 carro* processaRegistro(list<carro> *registros,int *tarifa){
@@ -56,10 +65,10 @@ int main(){
             carro dados;
             sscanf(linha,"%s %s %s %d",dados.placa,dados.horario,dados.status,&dados.km);
             registros.push_back(dados);
-            printf("\nNN:%s\n",linha);
+            //printf("\n%s\n",linha);
         }
         processaRegistro(&registros,tarifa);
-
+        cout << endl;
         //printList(registros);
         registros.clear();
         
