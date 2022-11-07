@@ -20,13 +20,12 @@ void printList(list<carro> lista){
         cout <<"horario:"<< it->horario << endl;
         cout <<"status:"<< it->status << endl;
         cout << "Km:"<< it->km << endl;
-        printf("%d",it);
     }
 }
 
-int compara(const void *a,const void *b){
-    carro carro1 = *(carro*)a;
-    carro carro2 = *(carro*)b;
+bool compara(const carro a,const carro b){
+    carro carro1 = a;
+    carro carro2 = b;
     if(carro1.km > carro2.km)
        return 1;
     return 0;
@@ -35,7 +34,7 @@ int compara(const void *a,const void *b){
 
 carro* processaRegistro(list<carro> *registros,int *tarifa){
     list<carro>::iterator it = registros->begin();
-    qsort(registros,sizeof(carro),registros->size(),compara);
+    registros->sort(compara);
     printList(*registros);
 
 }
@@ -59,9 +58,9 @@ int main(){
             registros.push_back(dados);
             printf("\nNN:%s\n",linha);
         }
-        //processaRegistro(&registros,tarifa);
+        processaRegistro(&registros,tarifa);
 
-        printList(registros);
+        //printList(registros);
         registros.clear();
         
  
