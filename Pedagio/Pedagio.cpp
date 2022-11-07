@@ -15,72 +15,55 @@ struct carro{
 
 void printList(list<carro> lista){
     list<carro>::iterator it;
-    cout << "TTTT" << endl;
     for(it = lista.begin();it != lista.end(); it++){
         cout <<"Placa:"<< it->placa << endl;
         cout <<"horario:"<< it->horario << endl;
         cout <<"status:"<< it->status << endl;
         cout << "Km:"<< it->km << endl;
+        printf("%d",it);
     }
 }
 
-carro* leitura(){
+int compara(const void *a,const void *b){
+    carro carro1 = *(carro*)a;
+    carro carro2 = *(carro*)b;
+    if(carro1.km > carro2.km)
+       return 1;
+    return 0;
+
+}
+
+carro* processaRegistro(list<carro> *registros,int *tarifa){
+    list<carro>::iterator it = registros->begin();
+    qsort(registros,sizeof(carro),registros->size(),compara);
+    printList(*registros);
 
 }
 int main(){
     
     //advance(it, 5); avança o iterator em 5 elementos
     
-    int casos, valoresH[24];
-    char linha[300] = "kk";
+    int casos, tarifa[24];
+    char linha[300];
     list<carro> registros;
 
     scanf("%d",&casos);
     for(int i = 0; i < 24; i++)
-       scanf("%d",&valoresH[i]);
+       scanf("%d",&tarifa[i]);
     scanf("%c");
     
     for(int i = 0; i < casos; i++){
-        while(strlen(linha) > 1 && fgets(linha,100,stdin)){
+        while(fgets(linha,100,stdin) && strlen(linha) > 1){
             carro dados;
-            registros.clear();
             sscanf(linha,"%s %s %s %d",dados.placa,dados.horario,dados.status,&dados.km);
             registros.push_back(dados);
-            printf("\n%s\n",linha);
-
+            printf("\nNN:%s\n",linha);
         }
+        //processaRegistro(&registros,tarifa);
+
         printList(registros);
-        //printf("%d", casos);
-        //printf("\n%d", strlen(linha));
-    }
-    //printf("\nLinha: %s\n",linha);
-
+        registros.clear();
         
-        /*
-        carro test;
-        *(test.placa) = "caiu";
-        printf("%s",test.placa);
-
-        /*
-        char *a = "caiu";
-        a = "caiu";
-        */
-       /*
-       char linha[10];
-    fgets(linha,10,stdin);
-    printf("%d", strlen(linha));
-    */
-
-
-
-
-/*
- char a[20];
-
- printf("%d",fgets(a,20,stdin));
- printf("%s",a);
- */
-
-    
-
+ 
+    }
 }
