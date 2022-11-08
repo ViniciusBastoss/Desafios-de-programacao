@@ -6,100 +6,133 @@
 //#include <iterator>
 using namespace std;
 
-struct carro{
+struct carro
+{
     char placa[20];
     char horario[20];
     char status[5];
     int km;
 };
 
-void printList(list<carro> lista){
-    list<carro>::iterator it;
-    for(it = lista.begin();it != lista.end(); it++){
-        cout <<"  Placa:"<< it->placa;
-        cout <<"  horario:"<< it->horario;
-        cout <<"  status:"<< it->status;
-        cout << "  Km:"<< it->km << endl;
+void printList(list<carro> lista)
+{
+    //list<carro>::iterator it;
+    for (auto it : lista)
+    {
+        cout << "  Placa:" << it.placa;
+        cout << "  horario:" << it.horario;
+        cout << "  status:" << it.status;
+        cout << "  Km:" << it.km << endl;
     }
     cout << endl;
 }
 
-//criterio de comparação para a ordenaçao
-bool compara(const carro carro1,const carro carro2){
+// criterio de comparação para a ordenaçao
+bool compara(const carro carro1, const carro carro2)
+{
     int result;
-    result = strcmp(carro1.placa,carro2.placa);
-    if(result > 0)
-       return 0;
-    else
-      if(result < 0)
+    result = strcmp(carro1.placa, carro2.placa);
+    if (result > 0)
+        return 0;
+    else if (result < 0)
         return 1;
-    result = strcmp(carro1.horario,carro2.horario);
-    if(result > 0)
-       return 0;
-    else
-      if(result < 0)
+    result = strcmp(carro1.horario, carro2.horario);
+    if (result > 0)
+        return 0;
+    else if (result < 0)
         return 1;
     return 0;
 }
 
-void validaRegistros(list<carro> *registros){
-    list<carro>::iterator it2,it = registros->begin();
-    while(it != registros->end()){
-        it2 = it++;
-        it--;
-        if(it->status[1] == 'x' || (it->status[1] == 'n' && it2->status[1] == 'n')){
+void validaRegistros(list<carro> *registros)
+{
+    list<carro>::iterator it2, it = registros->begin();
+    it2 = next(it,1);
+    //it2 = it++;
+    //it--;
+    
+    while (it != registros->end() && it2 != registros->end())
+    {
+        if (it->status[1] == 'x' || (it->status[1] == 'n' && it2->status[1] == 'n'))
+        {
+            printf("\n%s km:%d",it->placa, it->km);
             registros->erase(it);
             it = it2;
-            it2++;
+            if (it2 != registros->end())
+                it2++;
             printf("\nDB:Entrou");
         }
-        else{
-            advance(it,2);
-            advance(it2,3);
-            printf("\nDB:Não");
+        else
+        {
+            if (it2 != registros->end())
+            {
+                advance(it, 2);
+                advance(it2, 2);
+            }
+        }
+        if(it2 == registros->end()){
+            it2--;
+            printf("\n\nDebug Status:%c   Placa:%s\n\n",it2->status[1],it2->placa);
+            if(it2->status[1] == 'n'){
+                registros->erase(it2);
+                it2 = registros->end();
+            }
+
         }
     }
     printList(*registros);
-    
 }
 
-void processaRegistro(list<carro> *registros,int *tarifa){
+void processaRegistro(list<carro> *registros, int *tarifa)
+{
     list<carro>::iterator it = registros->begin();
     registros->sort(compara);
     printList(*registros);
-    //it = registros->begin();
-    //registros->erase(it);
+    // it = registros->begin();
+    // registros->erase(it);
     validaRegistros(registros);
-    printf("\nValidade:\n");
+    printf("\nValidado:\n");
     printList(*registros);
-
 }
-int main(){
-    
-    //advance(it, 5); avança o iterator em 5 elementos
-    
+int main()
+{
+
+    // advance(it, 5); avança o iterator em 5 elementos
+
     int casos, tarifa[24];
-    char linha[300];
+    char linha[300] = "kkk";
     list<carro> registros;
-printf("Debug");
-    scanf("%d",&casos);
-    for(int i = 0; i < 24; i++)
-       scanf("%d",&tarifa[i]);
+    list<carro>::iterator it;
+    carro aux;
+    
+    scanf("%d", &casos);
+    for (int i = 0; i < 24; i++)
+        scanf("%d", &tarifa[i]);
     scanf("%d");
 
-    
-    for(int i = 0; i < casos; i++){
-        while(fgets(linha,100,stdin) && strlen(linha) > 1){
-            carro dados;
-            sscanf(linha,"%s %s %s %d",dados.placa,dados.horario,dados.status,&dados.km);
+    for (int i = 0; i < casos; i++)
+    {
+        carro dados;
+        while (fgets(linha, 100, stdin))
+        {
+            if(strlen(linha) <= 1) break;
+            printf("\nLinha:%s",linha);
+            
+            sscanf(linha, "%s %s %s %d", dados.placa, dados.horario, dados.status, &dados.km);
+            printf("%d",dados.km);
             registros.push_back(dados);
-            //printf("\n%s\n",linha);
+            // printf("\n%s\n",linha); //Debug
         }
-        processaRegistro(&registros,tarifa);
+        registros.push_back(dados);
+        registros.pop_back();
+        //registros.erase(it);
+        //processaRegistro(&registros, tarifa);
+        //aux = *next(registros.end(),0);
+        it = next(registros.end(),-1);
+        advance(it,3);
+        printf("\nVazio placa:%d\n",it->km);//Debug
         cout << endl;
-        //printList(registros);
+        printList(registros);
         registros.clear();
-        
- 
     }
 }
