@@ -21,6 +21,7 @@ void printList(list<carro> lista){
         cout <<"  status:"<< it->status;
         cout << "  Km:"<< it->km << endl;
     }
+    cout << endl;
 }
 
 //criterio de comparação para a ordenaçao
@@ -46,23 +47,30 @@ void validaRegistros(list<carro> *registros){
     while(it != registros->end()){
         it2 = it++;
         it--;
-        if(it->status[2] == 'x'){
+        if(it->status[1] == 'x' || (it->status[1] == 'n' && it2->status[1] == 'n')){
             registros->erase(it);
             it = it2;
             it2++;
+            printf("\nDB:Entrou");
         }
-        else
-          it++;
-
-
+        else{
+            advance(it,2);
+            advance(it2,3);
+            printf("\nDB:Não");
+        }
     }
+    printList(*registros);
     
 }
 
 void processaRegistro(list<carro> *registros,int *tarifa){
     list<carro>::iterator it = registros->begin();
     registros->sort(compara);
+    printList(*registros);
+    //it = registros->begin();
+    //registros->erase(it);
     validaRegistros(registros);
+    printf("\nValidade:\n");
     printList(*registros);
 
 }
