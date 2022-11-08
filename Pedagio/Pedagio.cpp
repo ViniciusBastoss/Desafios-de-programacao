@@ -85,6 +85,7 @@ void validaRegistros(list<carro> *registros)
 
 void processaRegistro(list<carro> *registros, int *tarifa)
 {
+    
     list<carro>::iterator it = registros->begin();
     registros->sort(compara);
     printList(*registros);
@@ -98,7 +99,7 @@ int main()
 {
 
     // advance(it, 5); avança o iterator em 5 elementos
-
+/*
     int casos, tarifa[24];
     char linha[300] = "kkk";
     list<carro> registros;
@@ -135,4 +136,22 @@ int main()
         printList(registros);
         registros.clear();
     }
+    */
+   /*
+   list<carro> registro;
+   char linha[100] = "dbqu 01:26:18:07 exit 687";
+   carro dados;
+   sscanf(linha, "%s %s %s %d", dados.placa, dados.horario, dados.status, &dados.km);
+   registro.push_back(dados);
+   registro.push_back(dados);
+   registro.push_back(dados);
+   printf("\nPlaca:%s",registro.begin()->placa);
+   */
+  list<int> vet;
+  vet.push_back(1);
+  vet.push_back(2);
+  vet.push_back(3);
+
+  printf("\nValor:%d",*vet.end());
+
 }
