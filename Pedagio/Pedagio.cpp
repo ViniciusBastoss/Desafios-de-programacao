@@ -41,9 +41,28 @@ bool compara(const carro carro1,const carro carro2){
     return 0;
 }
 
-carro* processaRegistro(list<carro> *registros,int *tarifa){
+void validaRegistros(list<carro> *registros){
+    list<carro>::iterator it2,it = registros->begin();
+    while(it != registros->end()){
+        it2 = it++;
+        it--;
+        if(it->status[2] == 'x'){
+            registros->erase(it);
+            it = it2;
+            it2++;
+        }
+        else
+          it++;
+
+
+    }
+    
+}
+
+void processaRegistro(list<carro> *registros,int *tarifa){
     list<carro>::iterator it = registros->begin();
     registros->sort(compara);
+    validaRegistros(registros);
     printList(*registros);
 
 }
@@ -54,11 +73,12 @@ int main(){
     int casos, tarifa[24];
     char linha[300];
     list<carro> registros;
-
+printf("Debug");
     scanf("%d",&casos);
     for(int i = 0; i < 24; i++)
        scanf("%d",&tarifa[i]);
-    scanf("%c");
+    scanf("%d");
+
     
     for(int i = 0; i < casos; i++){
         while(fgets(linha,100,stdin) && strlen(linha) > 1){
