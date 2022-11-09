@@ -3,23 +3,17 @@
 #include <list>
 #include <iostream>
 #include <string.h>
-#include <string>
 //#include <iterator>
 using namespace std;
 
-/// @brief 
-typedef struct carro_
+struct carro
 {
-    char placa[20];
+    char placa[40];
     char horario[20];
     char status[5];
     int km;
-}carro;
-
-struct teste{
-    int a;
-    int b;
 };
+
 
 void printList(list<carro> lista)
 {
@@ -62,16 +56,13 @@ void validaRegistros(list<carro> *registros)
     {
         if (it->status[1] == 'x' || (it->status[1] == 'n' && it2->status[1] == 'n'))
         {
-            //printf("\n%s km:%d",it->placa, it->km);
             registros->erase(it);
-            it = it2;
+            it = next(it2,0);
             if (it2 != registros->end())
                 it2++;
-            //printf("\nDB:Entrou");
         }
         else
-        {
-                
+        { 
             if (it2 != registros->end())
             {
                 if(abs(strcmp(it->placa,it2->placa))){
@@ -88,11 +79,14 @@ void validaRegistros(list<carro> *registros)
         }
         if(it2 == registros->end()){
             it2--;
-            //printf("\n\nDebug Status:%c   Placa:%s\n\n",it2->status[1],it2->placa);
             if(it2->status[1] == 'n'){
                 registros->erase(it2);
                 it2 = registros->end();
             }
+        if(it2->km == it->km){
+            registros->erase(it);
+            it2 = registros->end();
+        }
 
         }
     }
@@ -116,7 +110,8 @@ void calculaTarifa(list<carro> registros, int *valoresTarifa){
            veiculo = *registros.begin();
            veiculo2 = *next(registros.begin(),1);
         }
-        cout << aux.placa <<" "<< "$" << total << endl;
+        printf("%s $%.2f\n",aux.placa,total);
+        //cout << aux.placa <<" "<< "$" << total << endl;
         total = 2;
     }
 }
@@ -129,8 +124,8 @@ void processaRegistro(list<carro> *registros, int *tarifa)
     // it = registros->begin();
     // registros->erase(it);
     validaRegistros(registros);
-    printf("\nValidado:\n");
-    printList(*registros);
+   // printf("\nValidado:\n");
+    //printList(*registros);
 }
 int main()
 {
@@ -144,22 +139,23 @@ int main()
     carro aux;
     
     scanf("%d", &casos);
-    for (int i = 0; i < 24; i++)
-        scanf("%d", &tarifa[i]);
-    scanf("%d");
-
     for (int i = 0; i < casos; i++)
     {
+        for (int i = 0; i < 24; i++)
+        scanf("%d", &tarifa[i]);
+        scanf("%d");
         carro dados;
         while (fgets(linha, 100, stdin))
         {
             if(strlen(linha) <= 1) break;
             //printf("\nLinha:%s",linha);
             sscanf(linha, "%s %s %s %d", dados.placa, dados.horario, dados.status, &dados.km);
+            //printf("\nLinha:%sm Placa:%s",linha,dados.placa);
             registros.push_back(dados);
         }
         processaRegistro(&registros, tarifa);
         calculaTarifa(registros,tarifa);
+        cout << endl;
         //printList(registros);
         registros.clear();
     }
