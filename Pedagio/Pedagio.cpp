@@ -90,7 +90,6 @@ void validaRegistros(list<carro> *registros)
 
         }
     }
-    //printList(*registros);
 }
 
 void calculaTarifa(list<carro> registros, int *valoresTarifa){
@@ -111,31 +110,15 @@ void calculaTarifa(list<carro> registros, int *valoresTarifa){
            veiculo2 = *next(registros.begin(),1);
         }
         printf("%s $%.2f\n",aux.placa,total);
-        //cout << aux.placa <<" "<< "$" << total << endl;
         total = 2;
     }
 }
-void processaRegistro(list<carro> *registros, int *tarifa)
-{
-    
-    list<carro>::iterator it = registros->begin();
-    registros->sort(compara);
-    //printList(*registros);
-    // it = registros->begin();
-    // registros->erase(it);
-    validaRegistros(registros);
-   // printf("\nValidado:\n");
-    //printList(*registros);
-}
+
 int main()
 {
-
-    // advance(it, 5); avança o iterator em 5 elementos
-
     int casos, tarifa[24];
     char linha[300] = "kkk";
     list<carro> registros;
-    list<carro>::iterator it;
     carro aux;
     
     scanf("%d", &casos);
@@ -148,37 +131,14 @@ int main()
         while (fgets(linha, 100, stdin))
         {
             if(strlen(linha) <= 1) break;
-            //printf("\nLinha:%s",linha);
             sscanf(linha, "%s %s %s %d", dados.placa, dados.horario, dados.status, &dados.km);
-            //printf("\nLinha:%sm Placa:%s",linha,dados.placa);
             registros.push_back(dados);
         }
-        processaRegistro(&registros, tarifa);
+        list<carro>::iterator it = registros.begin();
+        registros.sort(compara);
+        validaRegistros(&registros);
         calculaTarifa(registros,tarifa);
         cout << endl;
-        //printList(registros);
         registros.clear();
     }
-    
-   /*
-   list<carro> registro;
-   char linha[100] = "dbqu 01:26:18:07 exit 687";
-   carro dados;
-   sscanf(linha, "%s %s %s %d", dados.placa, dados.horario, dados.status, &dados.km);
-   registro.push_back(dados);
-   registro.push_back(dados);
-   registro.push_back(dados);
-   printf("\nPlaca:%s",registro.end()->placa);
-   */
-   /*
-  list<int> vet;
-  
-  vet.push_back(500);
-  vet.push_back(100);
-  vet.push_back(600);
-
-  //printf("\nValor:%d",vet.begin()->a);
-  cout << *next(vet.end(),-1);
-  */
-
 }
